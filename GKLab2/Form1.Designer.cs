@@ -31,6 +31,8 @@
             tableLayoutPanel1 = new TableLayoutPanel();
             pictureBox = new PictureBox();
             panel1 = new Panel();
+            lightColorButton = new Button();
+            objectColorButton = new Button();
             groupBox2 = new GroupBox();
             labelM = new Label();
             labelKs = new Label();
@@ -44,8 +46,7 @@
             trackBarY = new TrackBar();
             trackBarX = new TrackBar();
             colorDialog = new ColorDialog();
-            objectColorButton = new Button();
-            lightColorButton = new Button();
+            checkBoxMesh = new CheckBox();
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
             panel1.SuspendLayout();
@@ -82,6 +83,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(checkBoxMesh);
             panel1.Controls.Add(lightColorButton);
             panel1.Controls.Add(objectColorButton);
             panel1.Controls.Add(groupBox2);
@@ -90,6 +92,26 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(267, 579);
             panel1.TabIndex = 1;
+            // 
+            // lightColorButton
+            // 
+            lightColorButton.Location = new Point(153, 296);
+            lightColorButton.Name = "lightColorButton";
+            lightColorButton.Size = new Size(99, 29);
+            lightColorButton.TabIndex = 3;
+            lightColorButton.Text = "Light color";
+            lightColorButton.UseVisualStyleBackColor = true;
+            lightColorButton.Click += lightColorButton_Click;
+            // 
+            // objectColorButton
+            // 
+            objectColorButton.Location = new Point(14, 296);
+            objectColorButton.Name = "objectColorButton";
+            objectColorButton.Size = new Size(100, 29);
+            objectColorButton.TabIndex = 2;
+            objectColorButton.Text = "Object color";
+            objectColorButton.UseVisualStyleBackColor = true;
+            objectColorButton.Click += objectColorButton_Click;
             // 
             // groupBox2
             // 
@@ -207,25 +229,16 @@
             trackBarX.TabIndex = 0;
             trackBarX.ValueChanged += trackBarX_ValueChanged;
             // 
-            // objectColorButton
+            // checkBoxMesh
             // 
-            objectColorButton.Location = new Point(8, 296);
-            objectColorButton.Name = "objectColorButton";
-            objectColorButton.Size = new Size(100, 29);
-            objectColorButton.TabIndex = 2;
-            objectColorButton.Text = "Object color";
-            objectColorButton.UseVisualStyleBackColor = true;
-            objectColorButton.Click += objectColorButton_Click;
-            // 
-            // lightColorButton
-            // 
-            lightColorButton.Location = new Point(148, 296);
-            lightColorButton.Name = "lightColorButton";
-            lightColorButton.Size = new Size(99, 29);
-            lightColorButton.TabIndex = 3;
-            lightColorButton.Text = "Light color";
-            lightColorButton.UseVisualStyleBackColor = true;
-            lightColorButton.Click += lightColorButton_Click;
+            checkBoxMesh.AutoSize = true;
+            checkBoxMesh.Location = new Point(14, 331);
+            checkBoxMesh.Name = "checkBoxMesh";
+            checkBoxMesh.Size = new Size(106, 24);
+            checkBoxMesh.TabIndex = 4;
+            checkBoxMesh.Text = "Show mesh";
+            checkBoxMesh.UseVisualStyleBackColor = true;
+            checkBoxMesh.CheckedChanged += checkBoxMesh_CheckedChanged;
             // 
             // Form1
             // 
@@ -240,6 +253,7 @@
             tableLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBox).EndInit();
             panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             groupBox2.ResumeLayout(false);
             groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)trackBarM).EndInit();
@@ -272,5 +286,6 @@
         private ColorDialog colorDialog;
         private Button lightColorButton;
         private Button objectColorButton;
+        private CheckBox checkBoxMesh;
     }
 }

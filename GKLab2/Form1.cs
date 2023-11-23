@@ -10,7 +10,7 @@ namespace GKLab2
         {
             InitializeComponent();
             InitializeControls();
-            LightSource.LightPositon = new Vector3D((float)pictureBox.Size.Width / 2, (float)pictureBox.Size.Height / 2, 50);
+            LightSource.LightPositon = new Vector3D((float)pictureBox.Size.Width / 2, (float)pictureBox.Size.Height / 2, 100);
             var lcn = new Vector3D(1, 1, 1);
             lcn.Normalize();
             LightSource.LCN = lcn;
@@ -102,6 +102,19 @@ namespace GKLab2
                 LightSource.LCN = colorV;
                 triangleMesh.FillBitmap();
             }
+        }
+
+        private void checkBoxMesh_CheckedChanged(object sender, EventArgs e)
+        {
+            if(checkBoxMesh.Checked)
+            {
+                triangleMesh.ShowMesh = true;
+            }
+            else
+            {
+                triangleMesh.ShowMesh = false;
+            }
+            triangleMesh.FillBitmap();
         }
     }
 }

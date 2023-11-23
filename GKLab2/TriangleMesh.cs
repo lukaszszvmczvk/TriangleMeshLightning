@@ -45,6 +45,7 @@ namespace GKLab2
         public static double ks { get; set; }
         public static int m { get; set; }
         public static Vector3D Io { get; set; }
+        public bool ShowMesh { get; set; }
 
         public TriangleMesh() 
         {
@@ -60,27 +61,30 @@ namespace GKLab2
         public void InitializeTriangles()
         {
             triangles.Clear();
-            Vector3D[,] points = new Vector3D[X, Y];
             double stepX = 1.0 / (X-1);
             double stepY = 1.0 / (Y-1);
+            var pointsArray = new Vector3D[X, Y];
             for (int i = 0; i < X; i++)
             {
                 for (int j = 0; j < Y; j++)
                 {
-                    points[i, j].X = i * stepX;
-                    points[i, j].Y = j * stepY;
-                    points[i, j].Z = Utils.Z(points[i, j].X, points[i, j].Y);
+                    var x = i * stepX;
+                    var y = j * stepY;
+                    pointsArray[i, j] = new Vector3D(x, y, Utils.Z(x, y));
                 }
             }
-            triangles = new List<Triangle>();
-            for (int i = 0; i < X-1; i++)
+         
+            for (int j = 0; j < Y; ++j)
             {
-                for (int j = 0; j < Y-1; j++)
+                for (int i = 0; i < X - 1; i++)
                 {
-                    triangles.Add(new Triangle(points[i, j], points[i + 1, j], points[i + 1, j + 1]));
-                    triangles.Add(new Triangle(points[i, j], points[i, j + 1], points[i + 1, j + 1]));
+                    if (j != 0)
+                        triangles.Add(new Triangle(pointsArray[i, j], pointsArray[i + 1, j], pointsArray[i, j - 1]));
+                    if (j != Y - 1)
+                        triangles.Add(new Triangle(pointsArray[i, j], pointsArray[i + 1, j], pointsArray[i + 1, j + 1]));
                 }
             }
+         
             FillBitmap();
         }
         public void FillBitmap()
@@ -93,12 +97,15 @@ namespace GKLab2
                 FillTriangle(triangles[i], lockBitmap);
             });
             lockBitmap.UnlockBits();
-            foreach (var tri in triangles)
+            if (ShowMesh)
             {
-                using (var graphics = Graphics.FromImage(newCanvas))
+                foreach (var tri in triangles)
                 {
-                    var points = tri.Points.Select(x => new Point((int)(x.X*pictureBox.Width), (int)(x.Y * pictureBox.Height))).ToArray();
-                    graphics.DrawPolygon(new Pen(Brushes.Black), points);
+                    using (var graphics = Graphics.FromImage(newCanvas))
+                    {
+                        var points = tri.Points.Select(x => new Point((int)(x.X*pictureBox.Width), (int)(x.Y * pictureBox.Height))).ToArray();
+                        graphics.DrawPolygon(new Pen(Brushes.Black), points);
+                    }
                 }
             }
             pictureBox.Image = newCanvas;

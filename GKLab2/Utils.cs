@@ -36,10 +36,10 @@ namespace GKLab2
         }
         public static Vector3D GetNormalVector(Vector3D v)
         {
-            double zdu = (Z(v.X + eps, v.Y) - Z(v.X, v.Y)) / eps;
-            double zdv = (Z(v.X, v.Y + eps) - Z(v.X, v.Y)) / eps;
-            Vector3D Pu = new Vector3D(1, 0, zdu);
-            Vector3D Pv = new Vector3D(0, 1, zdv);
+            double Puz = (Z(v.X + eps, v.Y) - Z(v.X, v.Y)) / eps;
+            double Pvz = (Z(v.X, v.Y + eps) - Z(v.X, v.Y)) / eps;
+            Vector3D Pu = new Vector3D(1, 0, Puz);
+            Vector3D Pv = new Vector3D(0, 1, Pvz);
             var vector = Vector3D.CrossProduct(Pu, Pv);
             vector.Normalize();
             return vector;
@@ -59,7 +59,6 @@ namespace GKLab2
             double gamma = 1 - alpha - beta;
 
             Vector3D N = triangle.ANormal * alpha + triangle.BNormal * beta + triangle.CNormal * gamma;
-            var nN = N;
             N.Normalize();
             double z = alpha * A.Z + beta * B.Z + gamma * C.Z;
 
@@ -68,8 +67,7 @@ namespace GKLab2
             Vector3D V = new Vector3D(0, 0, 1);
 
             double cos1 = Vector3D.DotProduct(N, L);
-            //sprobowac dac tutaj nie znormalizowany
-            Vector3D R = 2 * cos1 * nN - L;
+            Vector3D R = 2 * cos1 * N - L;
             cos1 = Math.Max(cos1, 0);
 
             double cos2 = Vector3D.DotProduct(V, R);
