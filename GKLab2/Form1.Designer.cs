@@ -32,27 +32,30 @@
             pictureBox = new PictureBox();
             panel1 = new Panel();
             groupBox2 = new GroupBox();
+            labelM = new Label();
+            labelKs = new Label();
+            labelKd = new Label();
+            trackBarM = new TrackBar();
+            trackBarKs = new TrackBar();
+            trackBarKd = new TrackBar();
             groupBox1 = new GroupBox();
             labelY = new Label();
             labelX = new Label();
             trackBarY = new TrackBar();
             trackBarX = new TrackBar();
-            trackBarKd = new TrackBar();
-            trackBarKs = new TrackBar();
-            trackBarM = new TrackBar();
-            labelKd = new Label();
-            labelKs = new Label();
-            labelM = new Label();
+            colorDialog = new ColorDialog();
+            objectColorButton = new Button();
+            lightColorButton = new Button();
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
             panel1.SuspendLayout();
             groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)trackBarM).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)trackBarKs).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)trackBarKd).BeginInit();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)trackBarY).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trackBarX).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)trackBarKd).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)trackBarKs).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)trackBarM).BeginInit();
             SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -79,6 +82,8 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(lightColorButton);
+            panel1.Controls.Add(objectColorButton);
             panel1.Controls.Add(groupBox2);
             panel1.Controls.Add(groupBox1);
             panel1.Location = new Point(638, 3);
@@ -94,12 +99,63 @@
             groupBox2.Controls.Add(trackBarM);
             groupBox2.Controls.Add(trackBarKs);
             groupBox2.Controls.Add(trackBarKd);
-            groupBox2.Location = new Point(8, 146);
+            groupBox2.Location = new Point(8, 135);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(250, 168);
+            groupBox2.Size = new Size(250, 150);
             groupBox2.TabIndex = 1;
             groupBox2.TabStop = false;
             groupBox2.Text = "Light properties";
+            // 
+            // labelM
+            // 
+            labelM.AutoSize = true;
+            labelM.Location = new Point(6, 106);
+            labelM.Name = "labelM";
+            labelM.Size = new Size(37, 20);
+            labelM.TabIndex = 5;
+            labelM.Text = "m: 1";
+            // 
+            // labelKs
+            // 
+            labelKs.AutoSize = true;
+            labelKs.Location = new Point(5, 67);
+            labelKs.Name = "labelKs";
+            labelKs.Size = new Size(39, 20);
+            labelKs.TabIndex = 4;
+            labelKs.Text = "Ks: 0";
+            // 
+            // labelKd
+            // 
+            labelKd.AutoSize = true;
+            labelKd.Location = new Point(6, 26);
+            labelKd.Name = "labelKd";
+            labelKd.Size = new Size(42, 20);
+            labelKd.TabIndex = 3;
+            labelKd.Text = "Kd: 0";
+            // 
+            // trackBarM
+            // 
+            trackBarM.Location = new Point(66, 106);
+            trackBarM.Name = "trackBarM";
+            trackBarM.Size = new Size(173, 56);
+            trackBarM.TabIndex = 2;
+            trackBarM.ValueChanged += trackBarM_ValueChanged;
+            // 
+            // trackBarKs
+            // 
+            trackBarKs.Location = new Point(66, 67);
+            trackBarKs.Name = "trackBarKs";
+            trackBarKs.Size = new Size(173, 56);
+            trackBarKs.TabIndex = 1;
+            trackBarKs.ValueChanged += trackBarKs_ValueChanged;
+            // 
+            // trackBarKd
+            // 
+            trackBarKd.Location = new Point(66, 26);
+            trackBarKd.Name = "trackBarKd";
+            trackBarKd.Size = new Size(173, 56);
+            trackBarKd.TabIndex = 0;
+            trackBarKd.ValueChanged += trackBarKd_ValueChanged;
             // 
             // groupBox1
             // 
@@ -109,7 +165,7 @@
             groupBox1.Controls.Add(trackBarX);
             groupBox1.Location = new Point(8, 3);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(250, 137);
+            groupBox1.Size = new Size(250, 126);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Triangulation";
@@ -151,56 +207,25 @@
             trackBarX.TabIndex = 0;
             trackBarX.ValueChanged += trackBarX_ValueChanged;
             // 
-            // trackBarKd
+            // objectColorButton
             // 
-            trackBarKd.Location = new Point(66, 26);
-            trackBarKd.Name = "trackBarKd";
-            trackBarKd.Size = new Size(173, 56);
-            trackBarKd.TabIndex = 0;
-            trackBarKd.ValueChanged += trackBarKd_ValueChanged;
+            objectColorButton.Location = new Point(8, 296);
+            objectColorButton.Name = "objectColorButton";
+            objectColorButton.Size = new Size(100, 29);
+            objectColorButton.TabIndex = 2;
+            objectColorButton.Text = "Object color";
+            objectColorButton.UseVisualStyleBackColor = true;
+            objectColorButton.Click += objectColorButton_Click;
             // 
-            // trackBarKs
+            // lightColorButton
             // 
-            trackBarKs.Location = new Point(66, 67);
-            trackBarKs.Name = "trackBarKs";
-            trackBarKs.Size = new Size(173, 56);
-            trackBarKs.TabIndex = 1;
-            trackBarKs.ValueChanged += trackBarKs_ValueChanged;
-            // 
-            // trackBarM
-            // 
-            trackBarM.Location = new Point(66, 106);
-            trackBarM.Name = "trackBarM";
-            trackBarM.Size = new Size(173, 56);
-            trackBarM.TabIndex = 2;
-            trackBarM.ValueChanged += trackBarM_ValueChanged;
-            // 
-            // labelKd
-            // 
-            labelKd.AutoSize = true;
-            labelKd.Location = new Point(6, 26);
-            labelKd.Name = "labelKd";
-            labelKd.Size = new Size(42, 20);
-            labelKd.TabIndex = 3;
-            labelKd.Text = "Kd: 0";
-            // 
-            // labelKs
-            // 
-            labelKs.AutoSize = true;
-            labelKs.Location = new Point(5, 67);
-            labelKs.Name = "labelKs";
-            labelKs.Size = new Size(39, 20);
-            labelKs.TabIndex = 4;
-            labelKs.Text = "Ks: 0";
-            // 
-            // labelM
-            // 
-            labelM.AutoSize = true;
-            labelM.Location = new Point(6, 106);
-            labelM.Name = "labelM";
-            labelM.Size = new Size(37, 20);
-            labelM.TabIndex = 5;
-            labelM.Text = "m: 1";
+            lightColorButton.Location = new Point(148, 296);
+            lightColorButton.Name = "lightColorButton";
+            lightColorButton.Size = new Size(99, 29);
+            lightColorButton.TabIndex = 3;
+            lightColorButton.Text = "Light color";
+            lightColorButton.UseVisualStyleBackColor = true;
+            lightColorButton.Click += lightColorButton_Click;
             // 
             // Form1
             // 
@@ -217,13 +242,13 @@
             panel1.ResumeLayout(false);
             groupBox2.ResumeLayout(false);
             groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)trackBarM).EndInit();
+            ((System.ComponentModel.ISupportInitialize)trackBarKs).EndInit();
+            ((System.ComponentModel.ISupportInitialize)trackBarKd).EndInit();
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)trackBarY).EndInit();
             ((System.ComponentModel.ISupportInitialize)trackBarX).EndInit();
-            ((System.ComponentModel.ISupportInitialize)trackBarKd).EndInit();
-            ((System.ComponentModel.ISupportInitialize)trackBarKs).EndInit();
-            ((System.ComponentModel.ISupportInitialize)trackBarM).EndInit();
             ResumeLayout(false);
         }
 
@@ -244,5 +269,8 @@
         private Label labelKd;
         private Label labelKs;
         private Label labelM;
+        private ColorDialog colorDialog;
+        private Button lightColorButton;
+        private Button objectColorButton;
     }
 }

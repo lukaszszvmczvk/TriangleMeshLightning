@@ -5,6 +5,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Media3D;
 using static GKLab2.TriangleMesh;
 
 namespace GKLab2
@@ -13,79 +14,78 @@ namespace GKLab2
     {
         public class Triangle
         {
-            public Vector3 A { get; set; }
-            public Vector3 B { get; set; }
-            public Vector3 C { get; set; }
-            public Vector3 ANormal { get; set; }
-            public Vector3 BNormal { get; set; }
-            public Vector3 CNormal { get; set; }
-            public List<Vector3> Points { get; set; }
+            public Vector3D A { get; set; }
+            public Vector3D B { get; set; }
+            public Vector3D C { get; set; }
+            public Vector3D ANormal { get; set; }
+            public Vector3D BNormal { get; set; }
+            public Vector3D CNormal { get; set; }
+            public List<Vector3D> Points { get; set; }
             public List<Point> ExtendedPoints { get; set; }
-            public Triangle(Vector3 A, Vector3 B, Vector3 C)
+            public Triangle(Vector3D A, Vector3D B, Vector3D C)
             {
                 this.A = A; this.B = B; this.C = C;
                 this.ANormal = Utils.GetNormalVector(A);
                 this.BNormal = Utils.GetNormalVector(B);
                 this.CNormal = Utils.GetNormalVector(C);
-                Points = new List<Vector3>
+                Points = new List<Vector3D>
                 {
                     A,B,C
                 };
                 Points.Sort((a, b) => a.Y.CompareTo(b.Y));
-                ExtendedPoints = Points.Select(v => new Point((int)(v.X), (int)(v.Y))).ToList();
+                ExtendedPoints = Points.Select(v => new Point((int)(v.X* pictureBox.Width), (int)(v.Y*pictureBox.Height))).ToList();
             }
         }
         public static PictureBox pictureBox { get; set; }
         private List<Triangle> triangles = new List<Triangle>();
-        public static float[,] ControlPoints { get; set; }
+        public static double[,] ControlPoints { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
-        public static float kd { get; set; }
-        public static float ks { get; set; }
-        public static float m { get; set; }
-        public static Vector3 Io { get; set; }
+        public static double kd { get; set; }
+        public static double ks { get; set; }
+        public static int m { get; set; }
+        public static Vector3D Io { get; set; }
 
         public TriangleMesh() 
         {
-            ControlPoints = new float[4,4];
-            ControlPoints[1, 2] = 20;
+            ControlPoints = new double[4,4];
+            ControlPoints[0, 0] = 1;
             X = 4; Y = 4;
-            Io = new Vector3(0.5f, 0, 0);
-            kd = 0f;
-            ks = 0f;
+            Io = new Vector3D(1, 0, 0);
+            kd = 1;
+            ks = 0;
             m = 1;
             InitializeTriangles();
         }
         public void InitializeTriangles()
         {
             triangles.Clear();
-            float xStep = (pictureBox.Size.Width-1) / (float)(X - 1);
-            float yStep = (pictureBox.Size.Height-1) / (float)(Y - 1);
-            var points = new Vector3[X, Y];
-            for(int i=0; i<X; ++i)
+            Vector3D[,] points = new Vector3D[X, Y];
+            double stepX = 1.0 / (X-1);
+            double stepY = 1.0 / (Y-1);
+            for (int i = 0; i < X; i++)
             {
-                for(int j=0; j<Y; ++j)
+                for (int j = 0; j < Y; j++)
                 {
-                    var x = (float)(xStep * i);
-                    var y = (float)(yStep * j);
-                    points[i, j] = new Vector3(x, y, (float)Utils.ComputeZ(x, y));
+                    points[i, j].X = i * stepX;
+                    points[i, j].Y = j * stepY;
+                    points[i, j].Z = Utils.Z(points[i, j].X, points[i, j].Y);
                 }
             }
-            for (int j = 0; j < Y; ++j)
+            triangles = new List<Triangle>();
+            for (int i = 0; i < X-1; i++)
             {
-                for (int i = 0; i < X - 1; i++)
+                for (int j = 0; j < Y-1; j++)
                 {
-                    if (j != 0)
-                        triangles.Add(new Triangle(points[i, j], points[i + 1, j], points[i, j - 1]));
-                    if (j != Y - 1)
-                        triangles.Add(new Triangle(points[i, j], points[i + 1, j], points[i + 1, j + 1]));
+                    triangles.Add(new Triangle(points[i, j], points[i + 1, j], points[i + 1, j + 1]));
+                    triangles.Add(new Triangle(points[i, j], points[i, j + 1], points[i + 1, j + 1]));
                 }
             }
             FillBitmap();
         }
         public void FillBitmap()
         {
-            var newCanvas = new Bitmap(pictureBox.Size.Width, pictureBox.Size.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+            var newCanvas = new Bitmap(pictureBox.Size.Width+1, pictureBox.Size.Height+1, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
             var lockBitmap = new LockBitmap(newCanvas);
             lockBitmap.LockBits();
             Parallel.For(0, triangles.Count, i =>
@@ -93,14 +93,14 @@ namespace GKLab2
                 FillTriangle(triangles[i], lockBitmap);
             });
             lockBitmap.UnlockBits();
-            //foreach (var tri in triangles)
-            //{
-            //    using (var graphics = Graphics.FromImage(newCanvas))
-            //    {
-            //        var points = tri.Points.Select(x => new Point((int)(x.X*pictureBox.Width), (int)(x.Y * pictureBox.Height))).ToArray();
-            //        graphics.DrawPolygon(new Pen(Brushes.Black), points);
-            //    }
-            //}
+            foreach (var tri in triangles)
+            {
+                using (var graphics = Graphics.FromImage(newCanvas))
+                {
+                    var points = tri.Points.Select(x => new Point((int)(x.X*pictureBox.Width), (int)(x.Y * pictureBox.Height))).ToArray();
+                    graphics.DrawPolygon(new Pen(Brushes.Black), points);
+                }
+            }
             pictureBox.Image = newCanvas;
         }
         public void FillTriangle(Triangle triangle, LockBitmap bitmap)

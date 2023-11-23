@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Media3D;
 using static GKLab2.TriangleMesh;
 using static System.Windows.Forms.DataFormats;
 
@@ -11,100 +12,77 @@ namespace GKLab2
 {
     public static class Utils
     {
-        static float eps = 1e-6f;
-        public static double ComputeZ(double u, double v)
+        static double eps = 1e-6;
+        public static double Z(double x, double y)
         {
-            int n = 3;
-            double sum = 0.0;
-            double x = u / TriangleMesh.pictureBox.Width;
-            double y = v / TriangleMesh.pictureBox.Height;
-            var cp = TriangleMesh.ControlPoints;
-
-            for (int i = 0; i <= n; i++)
+            var cp = ControlPoints;
+            double sum = 0;
+            for (int i = 0; i < 4; i++)
             {
-                for (int j = 0; j <= n; j++)
+                for (int j = 0; j < 4; j++)
                 {
-                    sum += cp[i, j] * B(x, i) * B(y, j);
+                    sum += cp[i, j] * B(i, x) * B(j, y);
                 }
             }
             return sum;
         }
-
-        private static double B(double t, int i)
+        private static double B(int i, double x)
         {
-            int n = 3;
-            double nFactorial = 6.0;
-            double newton = nFactorial;
-
-            for (int k = 1; k <= i; k++)
-            {
-                newton /= (double)k;
-            }
-
-            int ni = n - i;
-            for (int k = 1; k <= ni; k++)
-            {
-                newton /= (double)k;
-            }
-
-            return newton * Math.Pow(t, i) * Math.Pow(t, ni);
+            var result = Math.Pow(x, i) * Math.Pow(1 - x, 3 - i);
+            if (i == 0 || i == 3)
+                return result;
+            else
+                return result * 3;
         }
-
-        public static Vector3 Pu(double u, double v)
+        public static Vector3D GetNormalVector(Vector3D v)
         {
-            double h = 1e-6;
-            double z = (ComputeZ(u + h, v) - ComputeZ(u - h, v)) / (2 * h);
-            return new Vector3(1, 0, (float)z);
-        }
-
-        public static Vector3 Pv(double u, double v)
-        {
-            double h = 1e-6;
-            double z = (ComputeZ(u, v + h) - ComputeZ(u, v - h)) / (2 * h);
-            return new Vector3(0, 1, (float)z);
-        }
-
-        public static Vector3 GetNormalVector(Vector3 v)
-        {
-            var x = v.X; var y = v.Y;
-            Vector3 N = Vector3.Cross(Pu(x, y), Pv(x, y));
-            return Vector3.Normalize(N);
+            double zdu = (Z(v.X + eps, v.Y) - Z(v.X, v.Y)) / eps;
+            double zdv = (Z(v.X, v.Y + eps) - Z(v.X, v.Y)) / eps;
+            Vector3D Pu = new Vector3D(1, 0, zdu);
+            Vector3D Pv = new Vector3D(0, 1, zdv);
+            var vector = Vector3D.CrossProduct(Pu, Pv);
+            vector.Normalize();
+            return vector;
         }
         public static Color GetColor(Triangle triangle, int xi, int yi)
         {
             var A = triangle.A; var B = triangle.B; var C = triangle.C;
-            var x = xi;
-            var y = yi;
+            var x = xi/(double)pictureBox.Width;
+            var y = yi / (double)pictureBox.Height;
 
-            float alpha = ((B.Y * C.X - C.Y * B.X) + (C.Y * x - y * C.X)
+            double alpha = ((B.Y * C.X - C.Y * B.X) + (C.Y * x - y * C.X)
                     + (y * B.X - B.Y * x)) / ((B.Y * C.X - C.Y * B.X)
                     + (C.Y * A.X - A.Y * C.X) + (A.Y * B.X - B.Y * A.X));
-            float beta = ((C.Y * A.X - A.Y * C.X) + (A.Y * x - y * A.X)
+            double beta = ((C.Y * A.X - A.Y * C.X) + (A.Y * x - y * A.X)
                  + (y * C.X - C.Y * x)) / ((B.Y * C.X - C.Y * B.X)
                  + (C.Y * A.X - A.Y * C.X) + (A.Y * B.X - B.Y * A.X));
-            float gamma = 1 - alpha - beta;
+            double gamma = 1 - alpha - beta;
 
-            Vector3 N = alpha * triangle.ANormal + beta * triangle.BNormal + gamma * triangle.CNormal;
-            N = Vector3.Normalize(N);
+            Vector3D N = triangle.ANormal * alpha + triangle.BNormal * beta + triangle.CNormal * gamma;
+            var nN = N;
+            N.Normalize();
+            double z = alpha * A.Z + beta * B.Z + gamma * C.Z;
 
-            float z = alpha * triangle.A.Z + beta * triangle.B.Z + gamma * triangle.C.Z;
+            Vector3D L = new Vector3D(LightSource.LightPositon.X - xi, LightSource.LightPositon.Y - yi, LightSource.LightPositon.Z - z);
+            L.Normalize();
+            Vector3D V = new Vector3D(0, 0, 1);
 
-            var L = Vector3.Normalize(new Vector3(LightSource.LightPositon.X - xi, LightSource.LightPositon.Y - yi, LightSource.LightPositon.Z - z));
-            var V = new Vector3(0, 0, 1);
-            var R = 2 * Vector3.Dot(N, L) * N - L;
+            double cos1 = Vector3D.DotProduct(N, L);
+            //sprobowac dac tutaj nie znormalizowany
+            Vector3D R = 2 * cos1 * nN - L;
+            cos1 = Math.Max(cos1, 0);
 
-            float nl = Vector3.Dot(N, L);
-            float vr = Vector3.Dot(V, R);
-            nl = nl < 0 ? 0 : nl;
-            vr = vr < 0 ? 0 : vr;
+            double cos2 = Vector3D.DotProduct(V, R);
+            cos2 = Math.Max(cos2, 0);
+            cos2 = Math.Pow(cos2, m);
 
-            var I = kd * LightSource.LightColorNormalized * Io * nl + ks * LightSource.LightColorNormalized * Io * MathF.Pow(vr, m);
-
-            var r = float.IsNaN(I.X * 255) || I.X * 255 > 255 ? 255 : I.X * 255;
-            var g = float.IsNaN(I.Y * 255) || I.Y * 255 > 255 ? 255 : I.Y * 255;
-            var b = float.IsNaN(I.Z * 255) || I.Z * 255 > 255 ? 255 : I.Z * 255;
-
-            return Color.FromArgb((int)r, (int)g, (int)b);
+            double red = 255 * Io.X * LightSource.LCN.X * (kd * cos1 + ks * cos2);
+            double green = 255 * Io.Y * LightSource.LCN.Y * (kd * cos1 + ks * cos2);
+            double blue = 255 * Io.Z * LightSource.LCN.Z * (kd * cos1 + ks * cos2);
+            red = red > 255 ? 255 : red;
+            green = green > 255 ? 255 : green;
+            blue = blue > 255 ? 255 : blue;
+            return Color.FromArgb((int)red, (int)green, (int)blue);
         }
     }
 }
