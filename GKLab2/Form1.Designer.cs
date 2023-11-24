@@ -31,6 +31,7 @@
             tableLayoutPanel1 = new TableLayoutPanel();
             pictureBox = new PictureBox();
             panel1 = new Panel();
+            checkBoxMesh = new CheckBox();
             lightColorButton = new Button();
             objectColorButton = new Button();
             groupBox2 = new GroupBox();
@@ -46,7 +47,7 @@
             trackBarY = new TrackBar();
             trackBarX = new TrackBar();
             colorDialog = new ColorDialog();
-            checkBoxMesh = new CheckBox();
+            animationCheckBox = new CheckBox();
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
             panel1.SuspendLayout();
@@ -83,6 +84,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(animationCheckBox);
             panel1.Controls.Add(checkBoxMesh);
             panel1.Controls.Add(lightColorButton);
             panel1.Controls.Add(objectColorButton);
@@ -92,6 +94,17 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(267, 579);
             panel1.TabIndex = 1;
+            // 
+            // checkBoxMesh
+            // 
+            checkBoxMesh.AutoSize = true;
+            checkBoxMesh.Location = new Point(14, 331);
+            checkBoxMesh.Name = "checkBoxMesh";
+            checkBoxMesh.Size = new Size(106, 24);
+            checkBoxMesh.TabIndex = 4;
+            checkBoxMesh.Text = "Show mesh";
+            checkBoxMesh.UseVisualStyleBackColor = true;
+            checkBoxMesh.CheckedChanged += checkBoxMesh_CheckedChanged;
             // 
             // lightColorButton
             // 
@@ -229,16 +242,16 @@
             trackBarX.TabIndex = 0;
             trackBarX.ValueChanged += trackBarX_ValueChanged;
             // 
-            // checkBoxMesh
+            // animationCheckBox
             // 
-            checkBoxMesh.AutoSize = true;
-            checkBoxMesh.Location = new Point(14, 331);
-            checkBoxMesh.Name = "checkBoxMesh";
-            checkBoxMesh.Size = new Size(106, 24);
-            checkBoxMesh.TabIndex = 4;
-            checkBoxMesh.Text = "Show mesh";
-            checkBoxMesh.UseVisualStyleBackColor = true;
-            checkBoxMesh.CheckedChanged += checkBoxMesh_CheckedChanged;
+            animationCheckBox.AutoSize = true;
+            animationCheckBox.Location = new Point(153, 331);
+            animationCheckBox.Name = "animationCheckBox";
+            animationCheckBox.Size = new Size(100, 24);
+            animationCheckBox.TabIndex = 5;
+            animationCheckBox.Text = "Animation";
+            animationCheckBox.UseVisualStyleBackColor = true;
+            animationCheckBox.CheckedChanged += animationCheckBox_CheckedChanged;
             // 
             // Form1
             // 
@@ -287,5 +300,6 @@
         private Button lightColorButton;
         private Button objectColorButton;
         private CheckBox checkBoxMesh;
+        private CheckBox animationCheckBox;
     }
 }

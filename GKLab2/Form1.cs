@@ -6,18 +6,30 @@ namespace GKLab2
     public partial class Form1 : Form
     {
         TriangleMesh triangleMesh;
+        System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
+        private int centerX;
+        private int centerY;
+        private int R;
+        private double angle;
         public Form1()
         {
             InitializeComponent();
             InitializeControls();
-            LightSource.LightPositon = new Vector3D((float)pictureBox.Size.Width / 2, (float)pictureBox.Size.Height / 2, 100);
+            centerX = pictureBox.Size.Width / 2;
+            centerY = pictureBox.Size.Height / 2;
+            angle = 0;
+            R = (pictureBox.Size.Height - 100) / 2;
+            LightSource.LightPositon = new Vector3D(centerX, centerY, 100);
             var lcn = new Vector3D(1, 1, 1);
             lcn.Normalize();
             LightSource.LCN = lcn;
             pictureBox.Image = new Bitmap(pictureBox.Size.Width, pictureBox.Size.Height);
             TriangleMesh.pictureBox = this.pictureBox;
             triangleMesh = new TriangleMesh();
+            timer.Interval = 25;
+            timer.Tick += Timer_Tick;
         }
+
         private void InitializeControls()
         {
             trackBarX.Minimum = trackBarY.Minimum = 4;
@@ -26,6 +38,14 @@ namespace GKLab2
             trackBarKd.Maximum = trackBarKs.Maximum = trackBarM.Maximum = 100;
             trackBarM.Minimum = 1;
             trackBarKd.Value = 100;
+        }
+        private void Timer_Tick(object? sender, EventArgs e)
+        {
+            int x = centerX + (int)(R * Math.Cos(angle));
+            int y = centerY + (int)(R * Math.Sin(angle));
+            angle += 0.1;
+            LightSource.LightPositon = new Vector3D(x, y, 100);
+            triangleMesh.FillBitmap();
         }
 
         private void trackBarX_ValueChanged(object sender, EventArgs e)
@@ -106,7 +126,7 @@ namespace GKLab2
 
         private void checkBoxMesh_CheckedChanged(object sender, EventArgs e)
         {
-            if(checkBoxMesh.Checked)
+            if (checkBoxMesh.Checked)
             {
                 triangleMesh.ShowMesh = true;
             }
@@ -115,6 +135,18 @@ namespace GKLab2
                 triangleMesh.ShowMesh = false;
             }
             triangleMesh.FillBitmap();
+        }
+
+        private void animationCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if(animationCheckBox.Checked)
+            {
+                timer.Start();
+            }
+            else
+            {
+                timer.Stop();
+            }
         }
     }
 }

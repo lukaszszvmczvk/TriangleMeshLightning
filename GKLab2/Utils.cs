@@ -50,12 +50,10 @@ namespace GKLab2
             var x = xi/(double)pictureBox.Width;
             var y = yi / (double)pictureBox.Height;
 
-            double alpha = ((B.Y * C.X - C.Y * B.X) + (C.Y * x - y * C.X)
-                    + (y * B.X - B.Y * x)) / ((B.Y * C.X - C.Y * B.X)
-                    + (C.Y * A.X - A.Y * C.X) + (A.Y * B.X - B.Y * A.X));
-            double beta = ((C.Y * A.X - A.Y * C.X) + (A.Y * x - y * A.X)
-                 + (y * C.X - C.Y * x)) / ((B.Y * C.X - C.Y * B.X)
-                 + (C.Y * A.X - A.Y * C.X) + (A.Y * B.X - B.Y * A.X));
+            double alpha = ((B.Y * C.X - C.Y * B.X) + (C.Y * x - y * C.X) + (y * B.X - B.Y * x)) / 
+                ((B.Y * C.X - C.Y * B.X) + (C.Y * A.X - A.Y * C.X) + (A.Y * B.X - B.Y * A.X));
+            double beta = ((C.Y * A.X - A.Y * C.X) + (A.Y * x - y * A.X) + (y * C.X - C.Y * x)) / 
+                ((B.Y * C.X - C.Y * B.X) + (C.Y * A.X - A.Y * C.X) + (A.Y * B.X - B.Y * A.X));
             double gamma = 1 - alpha - beta;
 
             Vector3D N = triangle.ANormal * alpha + triangle.BNormal * beta + triangle.CNormal * gamma;
