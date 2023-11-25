@@ -1,6 +1,7 @@
 namespace GKLab2
 {
     using System.Diagnostics;
+    using System.Drawing;
     using System.Numerics;
     using System.Windows.Media.Media3D;
 
@@ -172,6 +173,7 @@ namespace GKLab2
         private void LoadNormalMap(string filePath)
         {
             var bitmap = new Bitmap(filePath);
+            bitmap = new Bitmap(bitmap, pictureBox.Width + 1, pictureBox.Height + 1);
             var normals = new Vector3D[bitmap.Width, bitmap.Height];
             for (int i = 0; i < bitmap.Width; i++)
             {
@@ -184,19 +186,13 @@ namespace GKLab2
                     normals[i, j].Normalize();
                 }
             }
-            TriangleMesh.Width = Math.Min(pictureBox.Width, bitmap.Width - 1);
-            TriangleMesh.Height = Math.Min(pictureBox.Height, bitmap.Height - 1);
-            if (TriangleMesh.LT != null)
-            {
-                TriangleMesh.Width = Math.Min(TriangleMesh.Width, TriangleMesh.LT.GetLength(0));
-                TriangleMesh.Height = Math.Min(TriangleMesh.Height, TriangleMesh.LT.GetLength(1));
-            }
             TriangleMesh.INV = normals;
             triangleMesh.InitializeTriangles();
         }
         private void LoadTexture(string filePath)
         {
             var textureBitmap = new Bitmap(filePath);
+            textureBitmap = new Bitmap(textureBitmap, pictureBox.Width + 1, pictureBox.Height + 1);
             var colors = new Vector3D[textureBitmap.Width, textureBitmap.Height];
             for (int i = 0; i < textureBitmap.Width; i++)
             {
@@ -212,13 +208,6 @@ namespace GKLab2
                         colors[i, j].X = colors[i, j].Y = colors[i, j].Z = 0;
                     }
                 }
-            }
-            TriangleMesh.Width = Math.Min(pictureBox.Width, textureBitmap.Width - 1);
-            TriangleMesh.Height = Math.Min(pictureBox.Height, textureBitmap.Height - 1);
-            if(TriangleMesh.INV != null)
-            {
-                TriangleMesh.Width = Math.Min(TriangleMesh.Width, TriangleMesh.INV.GetLength(0));
-                TriangleMesh.Height = Math.Min(TriangleMesh.Height, TriangleMesh.INV.GetLength(1));
             }
             TriangleMesh.LT = colors;
             triangleMesh.InitializeTriangles();
