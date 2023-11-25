@@ -33,7 +33,7 @@ namespace GKLab2
                     A,B,C
                 };
                 Points.Sort((a, b) => a.Y.CompareTo(b.Y));
-                ExtendedPoints = Points.Select(v => new Point((int)(v.X* pictureBox.Width), (int)(v.Y*pictureBox.Height))).ToList();
+                ExtendedPoints = Points.Select(v => new Point((int)(v.X * Width), (int)(v.Y * Height))).ToList();
             }
         }
         public static PictureBox pictureBox { get; set; }
@@ -45,17 +45,25 @@ namespace GKLab2
         public static double ks { get; set; }
         public static int m { get; set; }
         public static Vector3D Io { get; set; }
+        public static bool UseImage { get; set; }
+        public static bool UseNormalMap { get; set; }
+        public static Vector3D[,] INV { get; set; }
+        public static Vector3D[,] LT { get; set; }
         public bool ShowMesh { get; set; }
+        public static int Height { get; set; }
+        public static int Width { get; set; }
 
         public TriangleMesh() 
         {
             ControlPoints = new double[4,4];
+            ControlPoints[0,1] = 0.5;
             X = 4; Y = 4;
             Io = new Vector3D(1, 0, 0);
             kd = 1;
             ks = 0;
             m = 1;
             InitializeTriangles();
+            FillBitmap();
         }
         public void InitializeTriangles()
         {
@@ -83,12 +91,10 @@ namespace GKLab2
                         triangles.Add(new Triangle(pointsArray[i, j], pointsArray[i + 1, j], pointsArray[i + 1, j + 1]));
                 }
             }
-         
-            FillBitmap();
         }
         public void FillBitmap()
         {
-            var newCanvas = new Bitmap(pictureBox.Size.Width+1, pictureBox.Size.Height+1, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+            var newCanvas = new Bitmap(Width + 1, Height + 1, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
             var lockBitmap = new LockBitmap(newCanvas);
             lockBitmap.LockBits();
             Parallel.For(0, triangles.Count, i =>

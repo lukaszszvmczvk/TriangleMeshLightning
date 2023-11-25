@@ -26,6 +26,7 @@ namespace GKLab2
             LightSource.LCN = lcn;
             pictureBox.Image = new Bitmap(pictureBox.Size.Width, pictureBox.Size.Height);
             TriangleMesh.pictureBox = this.pictureBox;
+            TriangleMesh.Width = pictureBox.Width; TriangleMesh.Height = pictureBox.Height;
             triangleMesh = new TriangleMesh();
             timer.Interval = 25;
             timer.Tick += Timer_Tick;
@@ -146,7 +147,7 @@ namespace GKLab2
 
         private void animationCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            if(animationCheckBox.Checked)
+            if (animationCheckBox.Checked)
             {
                 timer.Start();
             }
@@ -154,6 +155,111 @@ namespace GKLab2
             {
                 timer.Stop();
             }
+        }
+
+        private void loadImageButton_Click(object sender, EventArgs e)
+        {
+            var dialog = new OpenFileDialog();
+            dialog.Filter = "Image Files |*.jpg;*.jpeg;*.png;";
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                if (!string.IsNullOrEmpty(dialog.FileName))
+                    LoadTexture(dialog.FileName);
+            }
+            dialog.Dispose();
+        }
+
+        private void LoadNormalMap(string filePath)
+        {
+            var bitmap = new Bitmap(filePath);
+            var normals = new Vector3D[bitmap.Width, bitmap.Height];
+            for (int i = 0; i < bitmap.Width; i++)
+            {
+                for (int j = 0; j < bitmap.Height; j++)
+                {
+                    var pixelColor = bitmap.GetPixel(i, j);
+                    normals[i, j].X = (pixelColor.R - 127) / 128.0;
+                    normals[i, j].Y = (pixelColor.G - 127) / 128.0;
+                    normals[i, j].Z = pixelColor.B / 255.0;
+                    normals[i, j].Normalize();
+                }
+            }
+            TriangleMesh.Width = Math.Min(pictureBox.Width, bitmap.Width - 1);
+            TriangleMesh.Height = Math.Min(pictureBox.Height, bitmap.Height - 1);
+            if (TriangleMesh.LT != null)
+            {
+                TriangleMesh.Width = Math.Min(TriangleMesh.Width, TriangleMesh.LT.GetLength(0));
+                TriangleMesh.Height = Math.Min(TriangleMesh.Height, TriangleMesh.LT.GetLength(1));
+            }
+            TriangleMesh.INV = normals;
+            triangleMesh.InitializeTriangles();
+        }
+        private void LoadTexture(string filePath)
+        {
+            var textureBitmap = new Bitmap(filePath);
+            var colors = new Vector3D[textureBitmap.Width, textureBitmap.Height];
+            for (int i = 0; i < textureBitmap.Width; i++)
+            {
+                for (int j = 0; j < textureBitmap.Height; j++)
+                {
+                    var pixelColor = textureBitmap.GetPixel(i, j);
+                    colors[i, j].X = pixelColor.R;
+                    colors[i, j].Y = pixelColor.G;
+                    colors[i, j].Z = pixelColor.B;
+                    colors[i, j].Normalize();
+                    if (double.IsNaN(colors[i, j].X))
+                    {
+                        colors[i, j].X = colors[i, j].Y = colors[i, j].Z = 0;
+                    }
+                }
+            }
+            TriangleMesh.Width = Math.Min(pictureBox.Width, textureBitmap.Width - 1);
+            TriangleMesh.Height = Math.Min(pictureBox.Height, textureBitmap.Height - 1);
+            if(TriangleMesh.INV != null)
+            {
+                TriangleMesh.Width = Math.Min(TriangleMesh.Width, TriangleMesh.INV.GetLength(0));
+                TriangleMesh.Height = Math.Min(TriangleMesh.Height, TriangleMesh.INV.GetLength(1));
+            }
+            TriangleMesh.LT = colors;
+            triangleMesh.InitializeTriangles();
+        }
+        private void useImageCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (TriangleMesh.LT == null)
+            {
+                useImageCheckBox.Checked = false;
+                return;
+            }
+            if(useImageCheckBox.Checked)
+                TriangleMesh.UseImage = true;
+            else
+                TriangleMesh.UseImage = false;
+            triangleMesh.FillBitmap();
+        }
+        private void loadMapButton_Click(object sender, EventArgs e)
+        {
+            var dialog = new OpenFileDialog();
+            dialog.Filter = "Image Files |*.jpg;*.jpeg;*.png;";
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                if (!string.IsNullOrEmpty(dialog.FileName))
+                    LoadNormalMap(dialog.FileName);
+            }
+            dialog.Dispose();
+        }
+        private void useNormalMapCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (TriangleMesh.INV == null)
+            {
+                useNormalMapCheckBox.Checked = false;
+                return;
+            }
+            if(useNormalMapCheckBox.Checked)
+                TriangleMesh.UseNormalMap = true;
+            else
+                TriangleMesh.UseNormalMap = false;
+            triangleMesh.FillBitmap();
+
         }
     }
 }

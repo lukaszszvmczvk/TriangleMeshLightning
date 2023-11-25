@@ -31,6 +31,10 @@
             tableLayoutPanel1 = new TableLayoutPanel();
             pictureBox = new PictureBox();
             panel1 = new Panel();
+            loadMapButton = new Button();
+            useImageCheckBox = new CheckBox();
+            loadImageButton = new Button();
+            animationCheckBox = new CheckBox();
             checkBoxMesh = new CheckBox();
             lightColorButton = new Button();
             objectColorButton = new Button();
@@ -47,7 +51,7 @@
             trackBarY = new TrackBar();
             trackBarX = new TrackBar();
             colorDialog = new ColorDialog();
-            animationCheckBox = new CheckBox();
+            useNormalMapCheckBox = new CheckBox();
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
             panel1.SuspendLayout();
@@ -84,6 +88,10 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(useNormalMapCheckBox);
+            panel1.Controls.Add(loadMapButton);
+            panel1.Controls.Add(useImageCheckBox);
+            panel1.Controls.Add(loadImageButton);
             panel1.Controls.Add(animationCheckBox);
             panel1.Controls.Add(checkBoxMesh);
             panel1.Controls.Add(lightColorButton);
@@ -95,10 +103,52 @@
             panel1.Size = new Size(267, 579);
             panel1.TabIndex = 1;
             // 
+            // loadMapButton
+            // 
+            loadMapButton.Location = new Point(152, 333);
+            loadMapButton.Name = "loadMapButton";
+            loadMapButton.Size = new Size(101, 29);
+            loadMapButton.TabIndex = 8;
+            loadMapButton.Text = "Load map";
+            loadMapButton.UseVisualStyleBackColor = true;
+            loadMapButton.Click += loadMapButton_Click;
+            // 
+            // useImageCheckBox
+            // 
+            useImageCheckBox.AutoSize = true;
+            useImageCheckBox.Location = new Point(14, 396);
+            useImageCheckBox.Name = "useImageCheckBox";
+            useImageCheckBox.Size = new Size(101, 24);
+            useImageCheckBox.TabIndex = 7;
+            useImageCheckBox.Text = "Use image";
+            useImageCheckBox.UseVisualStyleBackColor = true;
+            useImageCheckBox.CheckedChanged += useImageCheckBox_CheckedChanged;
+            // 
+            // loadImageButton
+            // 
+            loadImageButton.Location = new Point(14, 331);
+            loadImageButton.Name = "loadImageButton";
+            loadImageButton.Size = new Size(106, 29);
+            loadImageButton.TabIndex = 6;
+            loadImageButton.Text = "Load image";
+            loadImageButton.UseVisualStyleBackColor = true;
+            loadImageButton.Click += loadImageButton_Click;
+            // 
+            // animationCheckBox
+            // 
+            animationCheckBox.AutoSize = true;
+            animationCheckBox.Location = new Point(153, 366);
+            animationCheckBox.Name = "animationCheckBox";
+            animationCheckBox.Size = new Size(100, 24);
+            animationCheckBox.TabIndex = 5;
+            animationCheckBox.Text = "Animation";
+            animationCheckBox.UseVisualStyleBackColor = true;
+            animationCheckBox.CheckedChanged += animationCheckBox_CheckedChanged;
+            // 
             // checkBoxMesh
             // 
             checkBoxMesh.AutoSize = true;
-            checkBoxMesh.Location = new Point(14, 331);
+            checkBoxMesh.Location = new Point(14, 366);
             checkBoxMesh.Name = "checkBoxMesh";
             checkBoxMesh.Size = new Size(106, 24);
             checkBoxMesh.TabIndex = 4;
@@ -120,7 +170,7 @@
             // 
             objectColorButton.Location = new Point(14, 296);
             objectColorButton.Name = "objectColorButton";
-            objectColorButton.Size = new Size(100, 29);
+            objectColorButton.Size = new Size(106, 29);
             objectColorButton.TabIndex = 2;
             objectColorButton.Text = "Object color";
             objectColorButton.UseVisualStyleBackColor = true;
@@ -242,16 +292,16 @@
             trackBarX.TabIndex = 0;
             trackBarX.ValueChanged += trackBarX_ValueChanged;
             // 
-            // animationCheckBox
+            // useNormalMapCheckBox
             // 
-            animationCheckBox.AutoSize = true;
-            animationCheckBox.Location = new Point(153, 331);
-            animationCheckBox.Name = "animationCheckBox";
-            animationCheckBox.Size = new Size(100, 24);
-            animationCheckBox.TabIndex = 5;
-            animationCheckBox.Text = "Animation";
-            animationCheckBox.UseVisualStyleBackColor = true;
-            animationCheckBox.CheckedChanged += animationCheckBox_CheckedChanged;
+            useNormalMapCheckBox.AutoSize = true;
+            useNormalMapCheckBox.Location = new Point(152, 396);
+            useNormalMapCheckBox.Name = "useNormalMapCheckBox";
+            useNormalMapCheckBox.Size = new Size(89, 24);
+            useNormalMapCheckBox.TabIndex = 9;
+            useNormalMapCheckBox.Text = "Use map";
+            useNormalMapCheckBox.UseVisualStyleBackColor = true;
+            useNormalMapCheckBox.CheckedChanged += useNormalMapCheckBox_CheckedChanged;
             // 
             // Form1
             // 
@@ -301,5 +351,9 @@
         private Button objectColorButton;
         private CheckBox checkBoxMesh;
         private CheckBox animationCheckBox;
+        private Button loadImageButton;
+        private CheckBox useImageCheckBox;
+        private Button loadMapButton;
+        private CheckBox useNormalMapCheckBox;
     }
 }
