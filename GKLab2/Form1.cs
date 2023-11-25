@@ -1,5 +1,6 @@
 namespace GKLab2
 {
+    using System.Diagnostics;
     using System.Numerics;
     using System.Windows.Media.Media3D;
 
@@ -45,7 +46,13 @@ namespace GKLab2
             int y = centerY + (int)(R * Math.Sin(angle));
             angle += 0.1;
             LightSource.LightPositon = new Vector3D(x, y, 100);
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
             triangleMesh.FillBitmap();
+            stopWatch.Stop();
+            double ts = stopWatch.Elapsed.TotalMilliseconds;
+            int fps = (int)(1000 / ts);
+            this.Text = "Light simulation. FPS: " + fps;
         }
 
         private void trackBarX_ValueChanged(object sender, EventArgs e)
