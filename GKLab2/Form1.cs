@@ -21,7 +21,7 @@ namespace GKLab2
             centerY = pictureBox.Size.Height / 2;
             angle = 0;
             R = (pictureBox.Size.Height - 100) / 2;
-            LightSource.LightPositon = new Vector3D(centerX, centerY, 100);
+            LightSource.LightPositon = new Vector3D(centerX, centerY, 50);
             var lcn = new Vector3D(1, 1, 1);
             lcn.Normalize();
             LightSource.LCN = lcn;
@@ -32,7 +32,6 @@ namespace GKLab2
             timer.Interval = 25;
             timer.Tick += Timer_Tick;
         }
-
         private void InitializeControls()
         {
             trackBarX.Minimum = trackBarY.Minimum = 4;
@@ -41,13 +40,43 @@ namespace GKLab2
             trackBarKd.Maximum = trackBarKs.Maximum = trackBarM.Maximum = 100;
             trackBarM.Minimum = 1;
             trackBarKd.Value = 100;
+            trackBarZ.Minimum = 1;
+            trackBarZ.Maximum = 300;
+            trackBarZ.Value = 50;
+
+            num00.Maximum = num01.Maximum = num02.Maximum = num03.Maximum = 10;
+            num10.Maximum = num11.Maximum = num12.Maximum = num13.Maximum = 10;
+            num20.Maximum = num21.Maximum = num22.Maximum = num23.Maximum = 10;
+            num30.Maximum = num31.Maximum = num32.Maximum = num33.Maximum = 10;
+
+            num00.Minimum = num01.Minimum = num02.Minimum = num03.Minimum = -10;
+            num10.Minimum = num11.Minimum = num12.Minimum = num13.Minimum = -10;
+            num20.Minimum = num21.Minimum = num22.Minimum = num23.Minimum = -10;
+            num30.Minimum = num31.Minimum = num32.Minimum = num33.Minimum = -10;
+
+            num00.ValueChanged += num_ValueChanged;
+            num01.ValueChanged += num_ValueChanged;
+            num02.ValueChanged += num_ValueChanged;
+            num03.ValueChanged += num_ValueChanged;
+            num10.ValueChanged += num_ValueChanged;
+            num11.ValueChanged += num_ValueChanged;
+            num12.ValueChanged += num_ValueChanged;
+            num13.ValueChanged += num_ValueChanged;
+            num20.ValueChanged += num_ValueChanged;
+            num21.ValueChanged += num_ValueChanged;
+            num22.ValueChanged += num_ValueChanged;
+            num23.ValueChanged += num_ValueChanged;
+            num30.ValueChanged += num_ValueChanged;
+            num31.ValueChanged += num_ValueChanged;
+            num32.ValueChanged += num_ValueChanged;
+            num33.ValueChanged += num_ValueChanged;
         }
         private void Timer_Tick(object? sender, EventArgs e)
         {
             int x = centerX + (int)(R * Math.Cos(angle));
             int y = centerY + (int)(R * Math.Sin(angle));
             angle += 0.1;
-            LightSource.LightPositon = new Vector3D(x, y, 100);
+            LightSource.LightPositon = new Vector3D(x, y, LightSource.LightPositon.Z);
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
             triangleMesh.FillBitmap();
@@ -56,7 +85,6 @@ namespace GKLab2
             int fps = (int)(1000 / ts);
             this.Text = "Light simulation. FPS: " + fps;
         }
-
         private void trackBarX_ValueChanged(object sender, EventArgs e)
         {
             if (triangleMesh != null)
@@ -64,9 +92,9 @@ namespace GKLab2
                 triangleMesh.X = trackBarX.Value;
                 labelX.Text = "X: " + trackBarX.Value.ToString();
                 triangleMesh.InitializeTriangles();
+                triangleMesh.FillBitmap();
             }
         }
-
         private void trackBarY_ValueChanged(object sender, EventArgs e)
         {
             if (triangleMesh != null)
@@ -74,9 +102,9 @@ namespace GKLab2
                 triangleMesh.Y = trackBarY.Value;
                 labelY.Text = "Y: " + trackBarY.Value.ToString();
                 triangleMesh.InitializeTriangles();
+                triangleMesh.FillBitmap();
             }
         }
-
         private void trackBarKd_ValueChanged(object sender, EventArgs e)
         {
             if (triangleMesh != null)
@@ -87,7 +115,6 @@ namespace GKLab2
                 triangleMesh.FillBitmap();
             }
         }
-
         private void trackBarKs_ValueChanged(object sender, EventArgs e)
         {
             if (triangleMesh != null)
@@ -98,7 +125,6 @@ namespace GKLab2
                 triangleMesh.FillBitmap();
             }
         }
-
         private void trackBarM_ValueChanged(object sender, EventArgs e)
         {
             if (triangleMesh != null)
@@ -108,7 +134,6 @@ namespace GKLab2
                 triangleMesh.FillBitmap();
             }
         }
-
         private void objectColorButton_Click(object sender, EventArgs e)
         {
             if (colorDialog.ShowDialog() == DialogResult.OK)
@@ -120,7 +145,6 @@ namespace GKLab2
                 triangleMesh.FillBitmap();
             }
         }
-
         private void lightColorButton_Click(object sender, EventArgs e)
         {
             if (colorDialog.ShowDialog() == DialogResult.OK)
@@ -132,7 +156,6 @@ namespace GKLab2
                 triangleMesh.FillBitmap();
             }
         }
-
         private void checkBoxMesh_CheckedChanged(object sender, EventArgs e)
         {
             if (checkBoxMesh.Checked)
@@ -145,7 +168,6 @@ namespace GKLab2
             }
             triangleMesh.FillBitmap();
         }
-
         private void animationCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             if (animationCheckBox.Checked)
@@ -157,7 +179,6 @@ namespace GKLab2
                 timer.Stop();
             }
         }
-
         private void loadImageButton_Click(object sender, EventArgs e)
         {
             var dialog = new OpenFileDialog();
@@ -169,7 +190,6 @@ namespace GKLab2
             }
             dialog.Dispose();
         }
-
         private void LoadNormalMap(string filePath)
         {
             var bitmap = new Bitmap(filePath);
@@ -219,7 +239,7 @@ namespace GKLab2
                 useImageCheckBox.Checked = false;
                 return;
             }
-            if(useImageCheckBox.Checked)
+            if (useImageCheckBox.Checked)
                 TriangleMesh.UseImage = true;
             else
                 TriangleMesh.UseImage = false;
@@ -243,12 +263,40 @@ namespace GKLab2
                 useNormalMapCheckBox.Checked = false;
                 return;
             }
-            if(useNormalMapCheckBox.Checked)
+            if (useNormalMapCheckBox.Checked)
                 TriangleMesh.UseNormalMap = true;
             else
                 TriangleMesh.UseNormalMap = false;
             triangleMesh.FillBitmap();
 
+        }
+        private void num_ValueChanged(object sender, EventArgs e)
+        {
+            TriangleMesh.ControlPoints[0, 0] = (double)(num00.Value) / 10.0;
+            TriangleMesh.ControlPoints[0, 1] = (double)(num01.Value) / 10.0;
+            TriangleMesh.ControlPoints[0, 2] = (double)(num02.Value) / 10.0;
+            TriangleMesh.ControlPoints[0, 3] = (double)(num03.Value) / 10.0;
+            TriangleMesh.ControlPoints[1, 0] = (double)(num10.Value) / 10.0;
+            TriangleMesh.ControlPoints[1, 1] = (double)(num11.Value) / 10.0;
+            TriangleMesh.ControlPoints[1, 2] = (double)(num12.Value) / 10.0;
+            TriangleMesh.ControlPoints[1, 3] = (double)(num13.Value) / 10.0;
+            TriangleMesh.ControlPoints[2, 0] = (double)(num20.Value) / 10.0;
+            TriangleMesh.ControlPoints[2, 1] = (double)(num21.Value) / 10.0;
+            TriangleMesh.ControlPoints[2, 2] = (double)(num22.Value) / 10.0;
+            TriangleMesh.ControlPoints[2, 3] = (double)(num23.Value) / 10.0;
+            TriangleMesh.ControlPoints[3, 0] = (double)(num30.Value) / 10.0;
+            TriangleMesh.ControlPoints[3, 1] = (double)(num31.Value) / 10.0;
+            TriangleMesh.ControlPoints[3, 2] = (double)(num32.Value) / 10.0;
+            TriangleMesh.ControlPoints[3, 3] = (double)(num33.Value) / 10.0;
+
+            triangleMesh.InitializeTriangles();
+            triangleMesh.FillBitmap();
+        }
+        private void trackBarZ_Scroll(object sender, EventArgs e)
+        {
+            LightSource.LightPositon = new Vector3D(LightSource.LightPositon.X, LightSource.LightPositon.Y, trackBarZ.Value);
+            labelZ.Text = "Z: " + trackBarZ.Value;
+            triangleMesh.FillBitmap();
         }
     }
 }
