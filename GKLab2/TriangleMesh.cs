@@ -56,7 +56,7 @@ namespace GKLab2
         public TriangleMesh() 
         {
             ControlPoints = new double[4,4];
-            X = 4; Y = 4;
+            X = 40; Y = 40;
             Io = new Vector3D(1, 0, 0);
             kd = 1;
             ks = 0;

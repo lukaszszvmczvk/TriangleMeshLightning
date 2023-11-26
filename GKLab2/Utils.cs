@@ -34,13 +34,22 @@ namespace GKLab2
             else
                 return result * 3;
         }
-        public static Vector3D GetNormalVector(Vector3D v)
+        private static Vector3D Pu(Vector3D v)
         {
             double Puz = (Z(v.X + eps, v.Y) - Z(v.X, v.Y)) / eps;
+            return new Vector3D(1, 0, Puz);
+
+        }
+        private static Vector3D Pv(Vector3D v)
+        {
             double Pvz = (Z(v.X, v.Y + eps) - Z(v.X, v.Y)) / eps;
-            Vector3D Pu = new Vector3D(1, 0, Puz);
-            Vector3D Pv = new Vector3D(0, 1, Pvz);
-            var vector = Vector3D.CrossProduct(Pu, Pv);
+            return new Vector3D(0, 1, Pvz);
+        }
+        public static Vector3D GetNormalVector(Vector3D v)
+        {
+            Vector3D pu = Pu(v);
+            Vector3D pv = Pv(v);
+            var vector = Vector3D.CrossProduct(pu, pv);
             vector.Normalize();
             return vector;
         }

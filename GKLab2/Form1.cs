@@ -36,6 +36,7 @@ namespace GKLab2
         {
             trackBarX.Minimum = trackBarY.Minimum = 4;
             trackBarX.Maximum = trackBarY.Maximum = 100;
+            trackBarX.Value = trackBarY.Value = 40;
             trackBarKd.Minimum = trackBarKs.Minimum = 0;
             trackBarKd.Maximum = trackBarKs.Maximum = trackBarM.Maximum = 100;
             trackBarM.Minimum = 1;

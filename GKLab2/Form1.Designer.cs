@@ -467,9 +467,9 @@
             labelY.ForeColor = SystemColors.ControlText;
             labelY.Location = new Point(9, 59);
             labelY.Name = "labelY";
-            labelY.Size = new Size(37, 23);
+            labelY.Size = new Size(46, 23);
             labelY.TabIndex = 3;
-            labelY.Text = "Y: 4";
+            labelY.Text = "Y: 40";
             // 
             // labelX
             // 
@@ -477,9 +477,9 @@
             labelX.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
             labelX.Location = new Point(7, 26);
             labelX.Name = "labelX";
-            labelX.Size = new Size(38, 23);
+            labelX.Size = new Size(47, 23);
             labelX.TabIndex = 2;
-            labelX.Text = "X: 4";
+            labelX.Text = "X: 40";
             // 
             // trackBarY
             // 
