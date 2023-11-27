@@ -299,5 +299,17 @@ namespace GKLab2
             labelZ.Text = "Z: " + trackBarZ.Value;
             triangleMesh.FillBitmap();
         }
+
+        private void replaceNCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if(replaceNCheckBox.Checked)
+            {
+                TriangleMesh.ReplaceN = true;
+            }
+            else
+            {
+                TriangleMesh.ReplaceN = false;
+            }
+        }
     }
 }

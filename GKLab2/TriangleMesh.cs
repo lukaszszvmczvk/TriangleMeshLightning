@@ -52,7 +52,7 @@ namespace GKLab2
         public bool ShowMesh { get; set; }
         public static int Height { get; set; }
         public static int Width { get; set; }
-
+        public static bool ReplaceN { get; set; }
         public TriangleMesh() 
         {
             ControlPoints = new double[4,4];
@@ -124,7 +124,6 @@ namespace GKLab2
             int k = 0;
             for (int yi = miny; yi <= maxy; ++yi)
             {
-                k = 0;
                 while (points[k].Y == yi - 1)
                 {
                     int prevK = k - 1 >= 0 ? k - 1 : points.Count - 1;

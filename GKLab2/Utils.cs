@@ -72,25 +72,31 @@ namespace GKLab2
             Vector3D V = new Vector3D(0, 0, 1);
             if (UseNormalMap)
             {
-                Vector3D vectorB;
-                if (Math.Abs(N.X) <= eps && Math.Abs(N.Y) <= eps && Math.Abs(N.Z - 1) <= eps)
+                if(ReplaceN)
                 {
-                    vectorB = new Vector3D(0, 1, 0);
+                    N = INV[xi, yi];
                 }
                 else
                 {
-                    vectorB = Vector3D.CrossProduct(N, V);
+                    Vector3D vectorB;
+                    if (Math.Abs(N.X) <= eps && Math.Abs(N.Y) <= eps && Math.Abs(N.Z - 1) <= eps)
+                    {
+                        vectorB = new Vector3D(0, 1, 0);
+                    }
+                    else
+                    {
+                        vectorB = Vector3D.CrossProduct(N, V);
+                        vectorB.Normalize();
+                    }
+
+                    var T = Vector3D.CrossProduct(vectorB, N);
+                    var M = new Matrix3D(T.X, vectorB.X, N.X, 0,
+                        T.Y, vectorB.Y, N.Y, 0,
+                        T.Z, vectorB.Z, N.Z, 0,
+                        0, 0, 0, 0);
+                    N = M.Transform(INV[xi, yi]);
+                    N.Normalize();
                 }
-                vectorB.Normalize();
-
-                var T = Vector3D.CrossProduct(vectorB, N);
-
-                var M = new Matrix3D(T.X, vectorB.X, N.X, 0,
-                    T.Y, vectorB.Y, N.Y, 0,
-                    T.Z, vectorB.Z, N.Z, 0,
-                    0, 0, 0, 0);
-                N = M.Transform(INV[xi, yi]);
-                N.Normalize();
             }
 
             Vector3D L = new Vector3D(LightSource.LightPositon.X - xi, LightSource.LightPositon.Y - yi, LightSource.LightPositon.Z - z);

@@ -71,6 +71,7 @@
             trackBarY = new TrackBar();
             trackBarX = new TrackBar();
             colorDialog = new ColorDialog();
+            replaceNCheckBox = new CheckBox();
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
             panel1.SuspendLayout();
@@ -143,6 +144,7 @@
             // 
             // groupBox3
             // 
+            groupBox3.Controls.Add(replaceNCheckBox);
             groupBox3.Controls.Add(num33);
             groupBox3.Controls.Add(num32);
             groupBox3.Controls.Add(num31);
@@ -497,6 +499,17 @@
             trackBarX.TabIndex = 0;
             trackBarX.ValueChanged += trackBarX_ValueChanged;
             // 
+            // replaceNCheckBox
+            // 
+            replaceNCheckBox.AutoSize = true;
+            replaceNCheckBox.Location = new Point(139, 0);
+            replaceNCheckBox.Name = "replaceNCheckBox";
+            replaceNCheckBox.Size = new Size(99, 24);
+            replaceNCheckBox.TabIndex = 16;
+            replaceNCheckBox.Text = "Replace N";
+            replaceNCheckBox.UseVisualStyleBackColor = true;
+            replaceNCheckBox.CheckedChanged += replaceNCheckBox_CheckedChanged;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -512,6 +525,7 @@
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             groupBox3.ResumeLayout(false);
+            groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)num33).EndInit();
             ((System.ComponentModel.ISupportInitialize)num32).EndInit();
             ((System.ComponentModel.ISupportInitialize)num31).EndInit();
@@ -586,5 +600,6 @@
         private NumericUpDown num32;
         private TrackBar trackBarZ;
         private Label labelZ;
+        private CheckBox replaceNCheckBox;
     }
 }
