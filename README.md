@@ -4,21 +4,12 @@
 
 ---
 
-## 📝 Overview
+## Overview
 The program constructs a **triangular mesh** representing the **3rd-degree Bezier surface** by interpolating control points in the \((x, y)\) domain. The lighting on the surface is computed using the **Lambertian lighting model**, which simulates realistic diffuse shading based on the object's orientation relative to the light source.
-
-The Bezier surface is defined by:
-\[
-z(x, y) = \sum_{i=0}^{3} \sum_{j=0}^{3} z_{i,j} B_{i,3}(x) B_{j,3}(y), \quad x, y \in [0, 1]
-\]
-where \( z_{i,j} \) are control points, and \( B_{n}(t) \) represents the Bernstein basis polynomial:
-\[
-B_{i,n}(t) = \binom{n}{i} t^i (1 - t)^{n - i}
-\]
 
 ---
 
-## 💡 Lighting Model
+## Lighting Model
 The lighting is calculated using the **Lambertian model**:
 \[
 I = k_a \cdot I_L \cdot I_O + k_d \cdot I_L \cdot I_O \cdot \cos(\theta_{N,L}) + k_s \cdot I_L \cdot I_O \cdot \cos^m(\theta_{V,R})
