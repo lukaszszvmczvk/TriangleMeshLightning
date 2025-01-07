@@ -9,20 +9,20 @@ The program constructs a **triangular mesh** representing the **3rd-degree Bezie
 
 ---
 
-## Lighting Model
-The lighting is calculated using the **Lambertian model**:
-$$
-I = k_a \cdot I_L \cdot I_O + k_d \cdot I_L \cdot I_O \cdot \cos(\theta_{N,L}) + k_s \cdot I_L \cdot I_O \cdot \cos^m(\theta_{V,R})
-$$
-where:
-- $k_a, k_d, k_s, m$ – material coefficients (ambient, diffuse, specular).
-- $I_L$ – light intensity.
-- $I_O$ – object color.
-- $N$ – surface normal vector.
-- $L$ – light direction vector.
-- $V$ – viewing vector.
-- $R$ – reflection vector.
+## **Lighting Model**  
 
+The lighting is calculated using the **Lambertian model**:
+
+**I = k_d * I_L * I_O * cos(θ<sub>N,L</sub>) + k_s * I_L * I_O * cos<sup>m</sup>(θ<sub>V,R</sub>)**
+
+where:
+- **k_a, k_d, k_s, m** – material coefficients (ambient, diffuse, specular).
+- **I_L** – light intensity.
+- **I_O** – object color.
+- **N** – surface normal vector.
+- **L** – light direction vector.
+- **V** – viewing vector.
+- **R** – reflection vector.
 
 ---
 
